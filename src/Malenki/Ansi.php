@@ -29,8 +29,8 @@ class Ansi
 {
     protected $str = null;
 
-    protected $fg = null;
-    protected $bg = null;
+    protected $fg = 39;
+    protected $bg = 49;
     protected $format = 0;
 
 
@@ -165,6 +165,12 @@ class Ansi
         }
 
         $arr_out[] = $this->str;
+
+        if($this->format)
+        {
+            $arr_out[] = sprintf("\033[2%dm", $this->format);
+        }
+
         $arr_out[] = "\033[0m";
 
         return implode('', $arr_out);
