@@ -1,0 +1,23 @@
+{
+    "name": "malenki/ansi",
+    "type": "library",
+    "description": "Simple class to put some colors into your CLI PHP apps!",
+    "keywords": ["colors","ANSI","CLI"],
+    "homepage": "https://github.com/malenkiki/ansi",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michel Petit",
+            "email": "petit.michel@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Malenki": "src/"
+        }
+    }
+}
