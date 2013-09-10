@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Ansi by malenkiki</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Ansi</h1>
+          <h2>Use colors in PHP terminal apps!</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/malenkiki/ansi/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/malenkiki/ansi/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/malenkiki/ansi" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="ansi" class="anchor" href="#ansi"><span class="octicon octicon-link"></span></a>ansi</h1>
+
+<p>Use colors in PHP terminal apps!</p>
+
+<p>You can use many foregrounds, backgrounds and styles.</p>
+
+<p>Available foreground colors are: <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>purple</code>, <code>cyan</code> and <code>white</code>.</p>
+
+<p>Available background colors are:  <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>magenta</code>, <code>cyan</code> and <code>gray</code>.</p>
+
+<p>Available styles are: <code>faint</code>, <code>bold</code>, <code>italic</code> and <code>underline</code>, but this effects may appear in different way into some terminals.</p>
+
+<p>"Hello World!" in red:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
+<span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">);</span>
+</pre></div>
+
+<p>"Hello World!" in red, background yellow:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
+<span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">bg</span><span class="p">(</span><span class="s1">'yellow'</span><span class="p">);</span>
+</pre></div>
+
+<p>"Hello World!" in red, background yellow and in bold:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
+<span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">bg</span><span class="p">(</span><span class="s1">'yellow'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">bold</span><span class="p">();</span>
+</pre></div>
+
+<p>You can use rendered string too:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
+<span class="nv">$str</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">bg</span><span class="p">(</span><span class="s1">'yellow'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">bold</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">();</span>
+</pre></div>
+
+<p>All methods are chainable, except <code>render()</code>.</p>
+
+<p>Enjoy!</p>
+        </section>
+
+        <footer>
+          Ansi is maintained by <a href="https://github.com/malenkiki">malenkiki</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
