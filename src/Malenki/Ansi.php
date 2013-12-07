@@ -25,15 +25,66 @@
 
 namespace Malenki;
 
+/**
+ * Ansi colored string.
+ *
+ * This class allows you to have color into you terminal PHP applications.
+ *
+ * In addition to foreground and background colors, you can use underline, 
+ * bold, faint and italic.
+ *
+ * Effect and color can be add together, if terminal is able to render it.
+ *
+ * **Note:** Some effects are not available into some terminal.
+ * 
+ * @author Michel Petit <petit.michel@gmail.com> 
+ * @license MIT
+ */
 class Ansi
 {
+    /**
+     * Stores the original string. 
+     * 
+     * @var string
+     * @access protected
+     */
     protected $str = null;
 
+    /**
+     * Foreground code to use. 
+     * 
+     * Default is set to 39 (default on the system).
+     *
+     * @var integer
+     * @access protected
+     */
     protected $fg = 39;
+
+    /**
+     * Background code to use. 
+     * 
+     * Default is set to 49 (default on the system).
+     *
+     * @var integer
+     * @access protected
+     */
     protected $bg = 49;
+
+
+    /**
+     * Format code. 
+     * 
+     * Default to 0, no effect.
+     *
+     * @var integer
+     * @access protected
+     */
     protected $format = 0;
 
 
+    /**
+     * Links from foreground color's name to its code
+     */
     protected static $arr_fg = array(
         'black'  => 30,
         'red'    => 31,
@@ -47,6 +98,9 @@ class Ansi
 
 
 
+    /**
+     * Links from background color's name to its code
+     */
     protected static $arr_bg = array(
         'black'   => 40,
         'red'     => 41,
@@ -60,6 +114,14 @@ class Ansi
 
 
 
+    /**
+     * Construct takes the string to format as argument.
+     * 
+     * @throws \InvalidArgumentException If argument is not a not null string
+     * @param string $str 
+     * @access public
+     * @return void
+     */
     public function __construct($str)
     {
         if(is_string($str) && strlen($str))
@@ -68,12 +130,23 @@ class Ansi
         }
         else
         {
-            throw new \Exception('Invalid string!');
+            throw new \InvalidArgumentException('Invalid string!');
         }
     }
 
 
 
+    /**
+     * Sets foreground color by giving its name. 
+     * 
+     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
+     * `purple`, `cyan` and `white`.
+     *
+     * @use self::$arr_fg
+     * @param string $name 
+     * @access public
+     * @return Ansi
+     */
     public function foreground($name)
     {
         if(array_key_exists($name, self::$arr_fg))
@@ -92,6 +165,17 @@ class Ansi
 
 
 
+    /**
+     * Sets background color by giving its name. 
+     * 
+     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
+     * `magenta`, `cyan` and `gray`.
+     *
+     * @use self::$arr_bg
+     * @param string $name Color's name
+     * @access public
+     * @return Ansi
+     */
     public function background($name)
     {
         if(array_key_exists($name, self::$arr_bg))
@@ -110,6 +194,14 @@ class Ansi
 
 
 
+    /**
+     * Shorthand for Ansi::foreground() method. 
+     * 
+     * @use Ansi::foreground();
+     * @param string $name Color's name
+     * @access public
+     * @return Ansi
+     */
     public function fg($name)
     {
         return $this->foreground($name);
@@ -117,11 +209,28 @@ class Ansi
 
 
 
+    /**
+     * Shorthand for Ansi::background() method. 
+     * 
+     * @use Ansi::background();
+     * @param string $name Color's name
+     * @access public
+     * @return Ansi
+     */
     public function bg($name)
     {
         return $this->background($name);
     }
 
+
+
+
+    /**
+     * Sets text as bold 
+     * 
+     * @access public
+     * @return Ansi
+     */
     public function bold()
     {
         $this->format = 1;
@@ -129,6 +238,14 @@ class Ansi
         return $this;
     }
 
+
+
+    /**
+     * Sets text as faint. 
+     * 
+     * @access public
+     * @return Ansi
+     */
     public function faint()
     {
         $this->format = 2;
@@ -136,6 +253,15 @@ class Ansi
         return $this;
     }
 
+
+
+
+    /**
+     * Sets text as italic.
+     * 
+     * @access public
+     * @return Ansi
+     */
     public function italic()
     {
         $this->format = 3;
@@ -143,6 +269,14 @@ class Ansi
         return $this;
     }
 
+
+
+    /**
+     * Underlines the text.
+     * 
+     * @access public
+     * @return Ansi
+     */
     public function underline()
     {
         $this->format = 4;
@@ -150,6 +284,14 @@ class Ansi
         return $this;
     }
 
+
+
+    /**
+     * Renders the text with color and effet applied.
+     * 
+     * @access public
+     * @return string
+     */
     public function render()
     {
         $arr_out = array();
@@ -178,6 +320,12 @@ class Ansi
 
 
 
+    /**
+     * In string context, renders the string with all effects applied. 
+     * 
+     * @access public
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();
