@@ -119,7 +119,7 @@ class Ansi
 
 
     /**
-     * Construct takes the string to format as argument.
+     * Constructor takes the string to format as argument.
      * 
      * @throws \InvalidArgumentException If argument is not a not null string
      * @param string $str 
