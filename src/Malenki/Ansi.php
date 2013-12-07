@@ -35,8 +35,12 @@ namespace Malenki;
  *
  * Effect and color can be add together, if terminal is able to render it.
  *
- * **Note:** Some effects are not available into some terminal.
+ * **Note 1:** Some effects are not available into some terminal.
  * 
+ * **Note 2:** windows terminal **does not support ANSI codes**, so, this is 
+ * usefull only on UNIX-like systems. If you use this class on MS Windows 
+ * system, then output and input string are the same. 
+ *
  * @author Michel Petit <petit.michel@gmail.com> 
  * @license MIT
  */
