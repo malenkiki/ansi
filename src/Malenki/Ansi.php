@@ -128,6 +128,14 @@ class Ansi
      */
     public function __construct($str)
     {
+        if(DIRECTORY_SEPARATOR == '\\')
+        {
+            trigger_error(
+                'ANSI codes are not available on MS Windows systems!',
+                E_USER_NOTICE
+            );
+        }
+        
         if(is_string($str) && strlen($str))
         {
             $this->str = $str;
@@ -298,6 +306,12 @@ class Ansi
      */
     public function render()
     {
+        // if on windows system, no ANSI!
+        if(DIRECTORY_SEPARATOR == '\\')
+        {
+            return $this->str;
+        }
+
         $arr_out = array();
 
         if($this->fg)
