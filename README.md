@@ -1,15 +1,14 @@
-ansi
-====
+# Ansi
 
 Use colors in PHP terminal apps!
 
-You can use many foregrounds, backgrounds and styles.
+You can use many **foregrounds**, **backgrounds** and **styles**.
 
-Available foreground colors are: `black`, `red`, `green`, `yellow`, `blue`, `purple`, `cyan` and `white`.
+Available **foreground** colors are: `black`, `red`, `green`, `yellow`, `blue`, `purple`, `cyan` and `white`.
 
-Available background colors are:  `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `gray`.
+Available **background** colors are:  `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `gray`.
 
-Available styles are: `faint`, `bold`, `italic` and `underline`, but this effects may appear in different way into some terminals.
+Available **styles** are: `faint`, `bold`, `italic` and `underline`, but this effects may appear in different way into some terminals.
 
 "Hello World!" in red:
 
@@ -37,6 +36,8 @@ You can use rendered string too:
 use Malenki\Ansi;
 $str = (new Ansi('Hello World!'))->fg('red')->bg('yellow')->bold()->render();
 ```
+
+You have examples into [examples directory](https://github.com/malenkiki/ansi/tree/master/examples) too.
 
 All methods are chainable, except `render()`.
 
