@@ -86,6 +86,8 @@ class Ansi
     protected $format = 0;
 
 
+    protected $is_special = false;
+
     /**
      * Links from foreground color's name to its code
      */
@@ -184,21 +186,66 @@ class Ansi
      * `magenta`, `cyan` and `gray`.
      *
      * @use self::$arr_bg
-     * @param string $name Color's name
+     * @param mixed $name Color's name or value
      * @access public
      * @return Ansi
      */
     public function background($name)
     {
-        if(array_key_exists($name, self::$arr_bg))
+        if(is_string($name))
         {
-            $this->bg = self::$arr_bg[$name];
+            if(array_key_exists($name, self::$arr_bg))
+            {
+                $this->bg = self::$arr_bg[$name];
+            }
+            else
+            {
+                throw \InvalidArgumentException(
+                    sprintf('Background color "%s" does not exist!', $name)
+                );
+            }
         }
         else
         {
-            throw \InvalidArgumentException(
-                sprintf('Background color "%s" does not exist!', $name)
-            );
+            if(is_array($name) && count($name) >= 3)
+            {
+                if(isset($name['r']))
+                {
+                    $name = (object) $name;
+                }
+                else
+                {
+                    $new = new \stdClass();
+                    $new->r = $name[0];
+                    $new->g = $name[1];
+                    $new->b = $name[2];
+
+                    $name = $new;
+                }
+            }
+
+            // RGB 256-like colors (xterm)
+            if(is_object($name) && isset($name->r) && isset($name->g) && isset($name->b))
+            {
+                if(
+                    in_array($name->r, range(0, 5))
+                    &&
+                    in_array($name->g, range(0, 5))
+                    &&
+                    in_array($name->b, range(0, 5))
+                )
+                {
+                    $this->bg = 16 + 36 * $name->r + 6 * $name->g + $name->b;
+                    $this->is_special = true;
+                }
+            }
+
+            // Grayscale having 24 levels
+            if(is_numeric($name) && in_array($name, range(0, 23)))
+            {
+                $this->bg = 0xE8 + $name;
+                $this->is_special = true;
+            }
         }
 
         return $this;
