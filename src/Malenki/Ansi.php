@@ -149,59 +149,22 @@ class Ansi
     }
 
 
-
-    /**
-     * Sets foreground color by giving its name. 
-     * 
-     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
-     * `purple`, `cyan` and `white`.
-     *
-     * @use self::$arr_fg
-     * @param string $name 
-     * @access public
-     * @return Ansi
-     */
-    public function foreground($name)
-    {
-        if(array_key_exists($name, self::$arr_fg))
-        {
-            $this->fg = self::$arr_fg[$name];
-        }
-        else
-        {
-            throw \InvalidArgumentException(
-                sprintf('Foreground color "%s" does not exist!', $name)
-            );
-        }
-
-        return $this;
-    }
-
-
-
-    /**
-     * Sets background color by giving its name. 
-     * 
-     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
-     * `magenta`, `cyan` and `gray`.
-     *
-     * @use self::$arr_bg
-     * @param mixed $name Color's name or value
-     * @access public
-     * @return Ansi
-     */
-    public function background($name)
+    protected function setColor($type, $name)
     {
         if(is_string($name))
         {
-            if(array_key_exists($name, self::$arr_bg))
+            if($type == 'bg' && array_key_exists($name, self::$arr_bg))
             {
-                $this->bg = self::$arr_bg[$name];
+                $this->$type = self::$arr_bg[$name];
+            }
+            elseif($type == 'fg' && array_key_exists($name, self::$arr_fg))
+            {
+                $this->$type = self::$arr_fg[$name];
             }
             else
             {
                 throw \InvalidArgumentException(
-                    sprintf('Background color "%s" does not exist!', $name)
+                    sprintf('Color "%s" does not exist!', $name)
                 );
             }
         }
@@ -235,7 +198,7 @@ class Ansi
                     in_array($name->b, range(0, 5))
                 )
                 {
-                    $this->bg = 16 + 36 * $name->r + 6 * $name->g + $name->b;
+                    $this->$type = 16 + 36 * $name->r + 6 * $name->g + $name->b;
                     $this->is_special = true;
                 }
             }
@@ -243,11 +206,47 @@ class Ansi
             // Grayscale having 24 levels
             if(is_numeric($name) && in_array($name, range(0, 23)))
             {
-                $this->bg = 0xE8 + $name;
+                $this->$type = 0xE8 + $name;
                 $this->is_special = true;
             }
         }
 
+    }
+
+
+    /**
+     * Sets foreground color by giving its name. 
+     * 
+     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
+     * `purple`, `cyan` and `white`.
+     *
+     * @use self::$arr_fg
+     * @param string $name 
+     * @access public
+     * @return Ansi
+     */
+    public function foreground($name)
+    {
+        $this->setColor('fg', $name);
+        return $this;
+    }
+
+
+
+    /**
+     * Sets background color by giving its name. 
+     * 
+     * Available valid names are: `black`, `red`, `green`, `yellow`, `blue`, 
+     * `magenta`, `cyan` and `gray`.
+     *
+     * @use self::$arr_bg
+     * @param mixed $name Color's name or value
+     * @access public
+     * @return Ansi
+     */
+    public function background($name)
+    {
+        $this->setColor('bg', $name);
         return $this;
     }
 
