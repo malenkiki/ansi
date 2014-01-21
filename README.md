@@ -41,4 +41,10 @@ You have examples into [examples directory](https://github.com/malenkiki/ansi/tr
 
 All methods are chainable, except `render()`.
 
+
+**New:** Now, some magic getters allow new syntax, so, all **foreground colors** are available by calling their name as attribute, it is also true for **faint**, **bold**, **italic** and **underline**. Example:
+```php
+echo (new Ansi('Hello World!'))->red->bold->underline;
+```
+
 Enjoy!
