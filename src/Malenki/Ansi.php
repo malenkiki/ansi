@@ -120,6 +120,21 @@ class Ansi
 
 
 
+    public function __get($name)
+    {
+        if(in_array($name, array_keys(self::$arr_fg)))
+        {
+            return $this->fg($name);
+        }
+
+        if(in_array($name, array('faint', 'bold', 'italic', 'underline')))
+        {
+            return $this->$name();
+        }
+    }
+
+
+
     /**
      * Constructor takes the string to format as argument.
      * 

@@ -42,6 +42,12 @@ foreach(array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'whit
     echo "\n";
 }
 
+//for previous, you can use magic getters too:
+
+$yeah = new Ansi('A lot of magic getters are available!');
+echo $yeah->red->bold->underline;
+echo "\n";
+
 foreach(array('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'gray') as $color)
 {
     $s = new Ansi('Hello World!');
