@@ -47,12 +47,12 @@ namespace Malenki;
 class Ansi
 {
     /**
-     * Stores the original string. 
+     * Stores the string to format/colorize. 
      * 
      * @var string
      * @access protected
      */
-    protected $str = null;
+    protected $str = '';
 
     /**
      * Foreground code to use. 
@@ -136,14 +136,14 @@ class Ansi
 
 
     /**
-     * Constructor takes the string to format as argument.
+     * Constructor takes the string to format as argument or nothing.
      * 
-     * @throws \InvalidArgumentException If argument is not a not null string
+     * @throws \InvalidArgumentException If given argument is not a not string
      * @param string $str 
      * @access public
      * @return void
      */
-    public function __construct($str)
+    public function __construct($str = '')
     {
         if(DIRECTORY_SEPARATOR == '\\')
         {
@@ -153,13 +153,13 @@ class Ansi
             );
         }
         
-        if(is_string($str) && strlen($str))
+        if(is_string($str))
         {
             $this->str = $str;
         }
         else
         {
-            throw new \InvalidArgumentException('Invalid string!');
+            throw new \InvalidArgumentException('The constructor’s argument must be a string!');
         }
     }
 
@@ -227,6 +227,27 @@ class Ansi
         }
 
     }
+
+
+    public function value($str)
+    {
+        if(!is_string($str))
+        {
+            throw new \InvalidArgumentException('To set new value, you must use string argument.');
+        }
+
+        $this->str = $str;
+
+        return $this;
+    }
+
+
+
+    public function v($str)
+    {
+        return $this->value($str);
+    }
+
 
 
     /**
@@ -367,34 +388,41 @@ class Ansi
      */
     public function render()
     {
-        // if on windows system, no ANSI!
-        if(DIRECTORY_SEPARATOR == '\\')
+        if(!empty($this->str))
+        {
+            // if on windows system, no ANSI!
+            if(DIRECTORY_SEPARATOR == '\\')
+            {
+                return $this->str;
+            }
+
+            $arr_out = array();
+
+            if($this->fg)
+            {
+                $arr_out[] = sprintf("\033[%d;%dm", $this->format, $this->fg);
+            }
+
+            if($this->bg)
+            {
+                $arr_out[] = sprintf("\033[%dm", $this->bg);
+            }
+
+            $arr_out[] = $this->str;
+
+            if($this->format)
+            {
+                $arr_out[] = sprintf("\033[2%dm", $this->format);
+            }
+
+            $arr_out[] = "\033[0m";
+
+            return implode('', $arr_out);
+        }
+        else
         {
             return $this->str;
         }
-
-        $arr_out = array();
-
-        if($this->fg)
-        {
-            $arr_out[] = sprintf("\033[%d;%dm", $this->format, $this->fg);
-        }
-
-        if($this->bg)
-        {
-            $arr_out[] = sprintf("\033[%dm", $this->bg);
-        }
-
-        $arr_out[] = $this->str;
-
-        if($this->format)
-        {
-            $arr_out[] = sprintf("\033[2%dm", $this->format);
-        }
-
-        $arr_out[] = "\033[0m";
-
-        return implode('', $arr_out);
     }
 
 

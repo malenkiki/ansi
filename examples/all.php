@@ -62,3 +62,13 @@ foreach(array('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'gra
     echo $s->bg($color)->underline();
     echo "\n";
 }
+
+$s = new Ansi();
+$s->bold->underline;
+
+foreach(array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white') as $color)
+{
+    echo $s->v($color)->$color;
+    echo "\n";
+}
+
