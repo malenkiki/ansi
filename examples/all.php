@@ -72,3 +72,6 @@ foreach(array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'whit
     echo "\n";
 }
 
+
+echo Ansi::parse('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to have <underline>some effects</underline> too!');
+echo "\n";

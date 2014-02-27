@@ -120,6 +120,55 @@ class Ansi
 
 
 
+    public static function parse($str)
+    {
+        if(preg_match("/\<.+\>.+\<\/.+\>/U",$str))
+        {
+            $dom = new \DOMDocument('1.0');
+            $dom->loadXML('<doc>'.$str.'</doc>');
+
+            $nodes = $dom->childNodes->item(0)->childNodes;
+
+            $out = '';
+
+            for($i = 0; $i < $nodes->length; $i++)
+            {
+                $n = $nodes->item($i);
+                
+                if($n->localName)
+                {
+                    $aspect = strtolower($n->localName);
+
+                    //TODO: tag inside tag.
+                    $ansi = new self();
+                    $formated_str = $ansi->v($n->nodeValue)->$aspect;
+
+                    if(strlen($formated_str))
+                    {
+                        $out .= $formated_str;
+                    }
+                    // not recogniezd format/color, soe silently ignore it
+                    else
+                    {
+                        $out .= $n->nodeValue;
+                    }
+                }
+                else
+                {
+                    $out .= $n->nodeValue;
+                }
+            }
+
+            return $out;
+        }
+        else
+        {
+            return $str;
+        }
+    }
+
+
+
     public function __get($name)
     {
         if(in_array($name, array_keys(self::$arr_fg)))
