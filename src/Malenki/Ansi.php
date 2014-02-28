@@ -120,46 +120,60 @@ class Ansi
 
 
 
+    protected static function parseDom($dom, &$str_out)
+    {
+        if($dom->childNodes)
+        {
+
+            for($i = 0; $i < $dom->childNodes->length; $i++)
+            {
+                $nodes = $dom->childNodes->item($i);
+
+                //var_dump('Node found: '.$dom->localName);
+                self::parseDom($nodes, $str_out);
+            }
+
+        }
+        else
+        {
+            $arr_tag_names = explode('/', trim($dom->getNodePath(),'/'));
+            array_shift($arr_tag_names);
+            array_pop($arr_tag_names);
+            $a = new self($dom->nodeValue);
+
+            $arr_effects = array_keys(self::$arr_fg);
+            $arr_effects = array_merge($arr_effects, array('faint', 'bold', 'italic', 'underline'));
+
+            foreach($arr_tag_names as $effect)
+            {
+                if(in_array($effect, $arr_effects))
+                {
+                    $a->$effect;
+                }
+            }
+
+            $str_out .= $a;
+        }
+    }
+
+
+
     public static function parse($str)
     {
         if(preg_match("/\<.+\>.+\<\/.+\>/U",$str))
         {
             $dom = new \DOMDocument('1.0');
-            $dom->loadXML('<doc>'.$str.'</doc>');
 
-            $nodes = $dom->childNodes->item(0)->childNodes;
-
-            $out = '';
-
-            for($i = 0; $i < $nodes->length; $i++)
+            if(!$dom->loadXML('<doc>'.$str.'</doc>'))
             {
-                $n = $nodes->item($i);
-                
-                if($n->localName)
-                {
-                    $aspect = strtolower($n->localName);
-
-                    //TODO: tag inside tag.
-                    $ansi = new self();
-                    $formated_str = $ansi->v($n->nodeValue)->$aspect;
-
-                    if(strlen($formated_str))
-                    {
-                        $out .= $formated_str;
-                    }
-                    // not recogniezd format/color, soe silently ignore it
-                    else
-                    {
-                        $out .= $n->nodeValue;
-                    }
-                }
-                else
-                {
-                    $out .= $n->nodeValue;
-                }
+                throw new \InvalidArgumentException('Your string has malformed tags!');
             }
 
-            return $out;
+            $str_out = '';
+
+            self::parseDom($dom, $str_out);
+
+            return $str_out;
         }
         else
         {
