@@ -162,6 +162,16 @@ class Ansi
     {
         if(preg_match("/\<.+\>.+\<\/.+\>/U",$str))
         {
+            if(!extension_loaded('dom'))
+            {
+                trigger_error(
+                    'DOM extension is not available! It is needed to parse string with tags!',
+                    E_USER_WARNING
+                );
+
+                return strip_tags($str);
+            }
+
             $dom = new \DOMDocument('1.0');
 
             if(!$dom->loadXML('<doc>'.$str.'</doc>'))
