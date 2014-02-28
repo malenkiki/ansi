@@ -60,4 +60,12 @@ Some magic getters allow new syntax, so, all **foreground colors** are available
 echo (new Ansi('Hello World!'))->red->bold->underline;
 ```
 
+More complex feature just added: parsing string having tags with same name as foreground colors and effects.
+
+So an example to understand:
+
+```php
+echo Ansi::parse('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to have <underline><yellow>some effects</yellow></underline> too!');
+```
+
 Enjoy!
