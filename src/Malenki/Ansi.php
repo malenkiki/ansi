@@ -210,6 +210,12 @@ class Ansi
         {
             return $this->fg($name);
         }
+        
+        if(preg_match('/^bg_/', $name) && in_array(preg_replace('/^bg_/', '', $name), array_keys(self::$arr_bg)))
+        {
+            return $this->bg(preg_replace('/^bg_/', '', $name));
+        }
+
 
         if(in_array($name, array('faint', 'bold', 'italic', 'underline')))
         {
