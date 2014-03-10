@@ -81,6 +81,12 @@ Some magic getters allow new syntax, so, all **foreground colors** are available
 echo (new Ansi('Hello World!'))->red->bold->underline;
 ```
 
+For **background colors**, you must preceed its name by `bg` like you can see into this example:
+
+```php
+echo (new Ansi('Hello World!'))->red->bold->underline->bg_blue;
+```
+
 More complex feature just added: parsing string having tags with same name as foreground colors and effects.
 
 So an example to understand:

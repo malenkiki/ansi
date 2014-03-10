@@ -45,7 +45,7 @@ foreach(array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'whit
 //for previous, you can use magic getters too:
 
 $yeah = new Ansi('A lot of magic getters are available!');
-echo $yeah->red->bold->underline;
+echo $yeah->red->bold->underline->bg_blue;
 echo "\n";
 
 foreach(array('black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'gray') as $color)
@@ -73,6 +73,6 @@ foreach(array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'whit
 }
 
 
-echo Ansi::parse('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to have <underline><yellow>some effects</yellow></underline> too!');
+echo Ansi::parse('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to <bg_magenta>have</bg_magenta> <underline><yellow>some effects</yellow></underline> too!');
 echo "\n";
 

@@ -141,6 +141,8 @@ class Ansi
             array_pop($arr_tag_names);
             $a = new self($dom->nodeValue);
 
+            $arr_bg = array_keys(self::$arr_bg);
+
             $arr_effects = array_keys(self::$arr_fg);
             $arr_effects = array_merge($arr_effects, array('faint', 'bold', 'italic', 'underline'));
 
@@ -149,6 +151,15 @@ class Ansi
                 if(in_array($effect, $arr_effects))
                 {
                     $a->$effect;
+                }
+                elseif(preg_match('/^bg_/', $effect))
+                {
+                    $effectbg = preg_replace('/^bg_/', '', $effect);
+
+                    if(in_array($effectbg, $arr_bg))
+                    {
+                        $a->bg($effectbg);
+                    }
                 }
             }
 
@@ -199,6 +210,12 @@ class Ansi
         {
             return $this->fg($name);
         }
+        
+        if(preg_match('/^bg_/', $name) && in_array(preg_replace('/^bg_/', '', $name), array_keys(self::$arr_bg)))
+        {
+            return $this->bg(preg_replace('/^bg_/', '', $name));
+        }
+
 
         if(in_array($name, array('faint', 'bold', 'italic', 'underline')))
         {
