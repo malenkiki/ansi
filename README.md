@@ -1,14 +1,37 @@
 # Ansi
 
-Use colors in PHP terminal apps!
+Use colors and styles in PHP terminal apps!
 
-You can use many **foregrounds**, **backgrounds** and **styles**.
+## Install It
 
-Available **foreground** colors are: `black`, `red`, `green`, `yellow`, `blue`, `purple`, `cyan` and `white`.
+You can get code here, from github by cloning this repository, or you can use [composer](https://getcomposer.org/) too. [Ansi is available on Packagist](https://packagist.org/packages/malenki/ansi)!
 
-Available **background** colors are:  `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `gray`.
+So, to install it using **composer**, just put something similar to the following lines into your own `composer.json` project file:
 
-Available **styles** are: `faint`, `bold`, `italic` and `underline`, but this effects may appear in different way into some terminals.
+```json
+{
+    "require": {
+        "malenki/ansi": "1.2.6",
+    }
+}
+```
+
+## Play With It
+
+### What It can Do
+You can use many **foregrounds**, **backgrounds** and **styles**:
+
+ - Available **foreground** colors are: `black`, `red`, `green`, `yellow`, `blue`, `purple`, `cyan` and `white`.
+
+ - Available **background** colors are:  `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `gray`.
+
+ - Available **styles** are: `faint`, `bold`, `italic` and `underline`, but this effects may appear in different way into some terminals.
+
+Ansi can also **parse** a string containing special XML-like tags to format it.
+
+Magic getters are available too, and many methods are chainable. Look at the [examples directory](https://github.com/malenkiki/ansi/tree/master/examples) or read next section to see how to use Ansi.
+
+### Example Of Use
 
 "Hello World!" in red:
 
@@ -48,8 +71,6 @@ You can use rendered string too:
 use Malenki\Ansi;
 $str = (new Ansi('Hello World!'))->fg('red')->bg('yellow')->bold()->render();
 ```
-
-You have examples into [examples directory](https://github.com/malenkiki/ansi/tree/master/examples) too.
 
 All methods are chainable, except `render()`.
 
