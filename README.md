@@ -2,6 +2,17 @@
 
 Use colors and styles in PHP terminal apps!
 
+Quick example to understand:
+
+```php
+use Malenki\Ansi;
+
+$a = new Ansi('Hello World!');
+echo $a->red->bold->underline; // you get string in red color, bold and underline! :)
+```
+
+This was just little example, please read all this doc to see how to use Ansi! You can use metthod or magic getters, as you want, and chaining methods are available.
+
 ## Install It
 
 You can get code here, from github by cloning this repository, or you can use [composer](https://getcomposer.org/) too. [Ansi is available on Packagist](https://packagist.org/packages/malenki/ansi)!
