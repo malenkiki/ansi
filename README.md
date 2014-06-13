@@ -1,5 +1,7 @@
 # Ansi
 
+[![Latest Stable Version](https://poser.pugx.org/malenki/ansi/v/stable.svg)](https://packagist.org/packages/malenki/ansi) [![Total Downloads](https://poser.pugx.org/malenki/ansi/downloads.svg)](https://packagist.org/packages/malenki/ansi) [![Latest Unstable Version](https://poser.pugx.org/malenki/ansi/v/unstable.svg)](https://packagist.org/packages/malenki/ansi) [![License](https://poser.pugx.org/malenki/ansi/license.svg)](https://packagist.org/packages/malenki/ansi)
+
 Use colors and styles in PHP terminal apps!
 
 Quick example to understand:
