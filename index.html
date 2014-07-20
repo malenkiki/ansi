@@ -3,51 +3,114 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
     <title>Ansi by malenkiki</title>
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
+    <a id="forkme_banner" href="https://github.com/malenkiki/ansi">View on GitHub</a>
+    <div class="shell">
 
-        <header>
-          <h1>Ansi</h1>
-          <h2>Use colors in PHP terminal apps!</h2>
-        </header>
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Ansi</h1>
+            <h2>Use colors in PHP terminal apps!</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/malenkiki/ansi/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/malenkiki/ansi/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/malenkiki/ansi" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/malenkiki/ansi/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/malenkiki/ansi/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
 
-        <hr>
 
-        <section id="main_content">
-          <h1>
-<a name="ansi" class="anchor" href="#ansi"><span class="octicon octicon-link"></span></a>ansi</h1>
+      <span class="banner-fix"></span>
 
-<p>Use colors in PHP terminal apps!</p>
 
-<p>You can use many foregrounds, backgrounds and styles.</p>
+      <section id="main_content">
+        <h1>
+<a name="ansi" class="anchor" href="#ansi"><span class="octicon octicon-link"></span></a>Ansi</h1>
 
-<p>Available foreground colors are: <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>purple</code>, <code>cyan</code> and <code>white</code>.</p>
+<p><a href="https://packagist.org/packages/malenki/ansi"><img src="https://poser.pugx.org/malenki/ansi/v/stable.svg" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/malenki/ansi"><img src="https://poser.pugx.org/malenki/ansi/downloads.svg" alt="Total Downloads"></a> <a href="https://packagist.org/packages/malenki/ansi"><img src="https://poser.pugx.org/malenki/ansi/v/unstable.svg" alt="Latest Unstable Version"></a> <a href="https://packagist.org/packages/malenki/ansi"><img src="https://poser.pugx.org/malenki/ansi/license.svg" alt="License"></a></p>
 
-<p>Available background colors are:  <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>magenta</code>, <code>cyan</code> and <code>gray</code>.</p>
+<p>Use colors and styles in PHP terminal apps!</p>
 
-<p>Available styles are: <code>faint</code>, <code>bold</code>, <code>italic</code> and <code>underline</code>, but this effects may appear in different way into some terminals.</p>
+<p>Quick example to understand:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
+
+<span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$a</span><span class="o">-&gt;</span><span class="na">red</span><span class="o">-&gt;</span><span class="na">bold</span><span class="o">-&gt;</span><span class="na">underline</span><span class="p">;</span> <span class="c1">// you get string in red color, bold and underline! :)</span>
+</pre></div>
+
+<p>This was just little example, please read all this doc to see how to use Ansi! You can use metthod or magic getters, as you want, and chaining methods are available.</p>
+
+<h2>
+<a name="install-it" class="anchor" href="#install-it"><span class="octicon octicon-link"></span></a>Install It</h2>
+
+<p>You can get code here, from github by cloning this repository, or you can use <a href="https://getcomposer.org/">composer</a> too. <a href="https://packagist.org/packages/malenki/ansi">Ansi is available on Packagist</a>!</p>
+
+<p>So, to install it using <strong>composer</strong>, just put something similar to the following lines into your own <code>composer.json</code> project file:</p>
+
+<div class="highlight highlight-json"><pre><span class="p">{</span>
+    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"malenki/ansi"</span><span class="p">:</span> <span class="s2">"1.2.6"</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="play-with-it" class="anchor" href="#play-with-it"><span class="octicon octicon-link"></span></a>Play With It</h2>
+
+<h3>
+<a name="what-it-can-do" class="anchor" href="#what-it-can-do"><span class="octicon octicon-link"></span></a>What It can Do</h3>
+
+<p>You can use many <strong>foregrounds</strong>, <strong>backgrounds</strong> and <strong>styles</strong>:</p>
+
+<ul>
+<li><p>Available <strong>foreground</strong> colors are: <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>purple</code>, <code>cyan</code> and <code>white</code>.</p></li>
+<li><p>Available <strong>background</strong> colors are:  <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>magenta</code>, <code>cyan</code> and <code>gray</code>.</p></li>
+<li><p>Available <strong>styles</strong> are: <code>faint</code>, <code>bold</code>, <code>italic</code> and <code>underline</code>, but this effects may appear in different way into some terminals.</p></li>
+</ul><p>Ansi can also <strong>parse</strong> a string containing special XML-like tags to format it.</p>
+
+<p>Magic getters are available too, and many methods are chainable. Look at the <a href="https://github.com/malenkiki/ansi/tree/master/examples">examples directory</a> or read next section to see how to use Ansi.</p>
+
+<h3>
+<a name="example-of-use" class="anchor" href="#example-of-use"><span class="octicon octicon-link"></span></a>Example Of Use</h3>
 
 <p>"Hello World!" in red:</p>
 
 <div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Malenki\Ansi</span><span class="p">;</span>
-<span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">);</span>
+
+<span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$a</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">);</span>
+</pre></div>
+
+<p>You can <strong>set string after constructor call</strong> using <code>v()</code> or <code>value()</code> methods, so you can keep color and formating and apply them for other strings:</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ansi</span><span class="p">();</span>
+<span class="nv">$a</span><span class="o">-&gt;</span><span class="na">fg</span><span class="p">(</span><span class="s1">'red'</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$a</span><span class="o">-&gt;</span><span class="na">v</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">);</span> <span class="c1">//in red</span>
+<span class="k">echo</span> <span class="nv">$a</span><span class="o">-&gt;</span><span class="na">v</span><span class="p">(</span><span class="s1">'Hello World again!'</span><span class="p">);</span> <span class="c1">//in red too</span>
+
 </pre></div>
 
 <p>"Hello World!" in red, background yellow:</p>
@@ -70,16 +133,49 @@
 
 <p>All methods are chainable, except <code>render()</code>.</p>
 
+<p>Some magic getters allow new syntax, so, all <strong>foreground colors</strong> are available by calling their name as attribute, it is also true for <strong>faint</strong>, <strong>bold</strong>, <strong>italic</strong> and <strong>underline</strong>. Example:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">red</span><span class="o">-&gt;</span><span class="na">bold</span><span class="o">-&gt;</span><span class="na">underline</span><span class="p">;</span>
+</pre></div>
+
+<p>For <strong>background colors</strong>, you must preceed its name by <code>bg</code> like you can see into this example:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Ansi</span><span class="p">(</span><span class="s1">'Hello World!'</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">red</span><span class="o">-&gt;</span><span class="na">bold</span><span class="o">-&gt;</span><span class="na">underline</span><span class="o">-&gt;</span><span class="na">bg_blue</span><span class="p">;</span>
+</pre></div>
+
+<p>More complex feature just added: parsing string having tags with same name as foreground colors and effects.</p>
+
+<p>So an example to understand:</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="nx">Ansi</span><span class="o">::</span><span class="na">parse</span><span class="p">(</span><span class="s1">'You can &lt;bold&gt;parse &lt;cyan&gt;string&lt;/cyan&gt;&lt;/bold&gt; containing &lt;red&gt;some tags&lt;/red&gt; to have &lt;underline&gt;&lt;yellow&gt;some effects&lt;/yellow&gt;&lt;/underline&gt; too!'</span><span class="p">);</span>
+</pre></div>
+
 <p>Enjoy!</p>
-        </section>
 
-        <footer>
-          Ansi is maintained by <a href="https://github.com/malenkiki">malenkiki</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+<h2>
+<a name="mit-open-source-license" class="anchor" href="#mit-open-source-license"><span class="octicon octicon-link"></span></a>MIT Open Source License</h2>
 
-        
-      </div>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/malenkiki">malenkiki</a> can be found on <a href="https://github.com/malenkiki/ansi">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
     </div>
+
+    
   </body>
 </html>
