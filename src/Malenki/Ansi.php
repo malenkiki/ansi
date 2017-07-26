@@ -64,6 +64,17 @@ class Ansi
     protected $fg = 39;
 
     /**
+     * Foreground extended code to use.
+     *
+     * Default is set to 38 (default on the system).
+     *
+     * @var integer
+     * @access protected
+     */
+    protected $fg_extended = 38;
+    protected $fg_extended_value = null;
+
+    /**
      * Background code to use.
      *
      * Default is set to 49 (default on the system).
@@ -72,6 +83,17 @@ class Ansi
      * @access protected
      */
     protected $bg = 49;
+
+    /**
+     * Background extended code to use.
+     *
+     * Default is set to 48 (default on the system).
+     *
+     * @var integer
+     * @access protected
+     */
+    protected $bg_extended = 48;
+    protected $bg_extended_value = 0;
 
     /**
      * Format code.
@@ -256,14 +278,16 @@ class Ansi
                     in_array($name->b, range(0, 5))
                 )
                 {
-                    $this->$type = 16 + 36 * $name->r + 6 * $name->g + $name->b;
+                    $type_extended = $type . '_extended_value';
+                    $this->$type_extended = 16 + 36 * $name->r + 6 * $name->g + $name->b;
                     $this->is_special = true;
                 }
             }
 
             // Grayscale having 24 levels
             if (is_numeric($name) && in_array($name, range(0, 23))) {
-                $this->$type = 0xE8 + $name;
+                $type_extended = $type . '_extended_value';
+                $this->$type_extended = 0xE8 + $name;
                 $this->is_special = true;
             }
         }
@@ -430,13 +454,31 @@ class Ansi
 
             $arr_out = array();
 
-            if ($this->fg) {
-                $arr_out[] = sprintf("\033[%d;%dm", $this->format, $this->fg);
+            if ($this->is_special) {
+                if (!is_null($this->fg_extended_value)) {
+                    $arr_out[] = sprintf(
+                        "\033[%d;5;%dm",
+                        $this->fg_extended,
+                        $this->fg_extended_value
+                    );
+                }
+                if (!is_null($this->bg_extended_value)) {
+                    $arr_out[] = sprintf(
+                        "\033[%d;5;%dm",
+                        $this->bg_extended,
+                        $this->bg_extended_value
+                    );
+                }
+            } else {
+                if ($this->fg) {
+                    $arr_out[] = sprintf("\033[%d;%dm", $this->format, $this->fg);
+                }
+
+                if ($this->bg) {
+                    $arr_out[] = sprintf("\033[%dm", $this->bg);
+                }
             }
 
-            if ($this->bg) {
-                $arr_out[] = sprintf("\033[%dm", $this->bg);
-            }
 
             $arr_out[] = $this->str;
 

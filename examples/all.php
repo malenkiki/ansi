@@ -70,3 +70,43 @@ foreach (array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'whi
 
 echo Ansi::parse('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to <bg_magenta>have</bg_magenta> <underline><yellow>some effects</yellow></underline> too!');
 echo "\n";
+
+$cc = new Ansi();
+$cc->v('multicolor');
+
+$range = range(0, 5);
+
+foreach ($range as $r) {
+    foreach($range as $g) {
+        foreach ($range as $b) {
+            echo $cc->fg([$r, $g, $b]);
+        }
+    }
+}
+echo "\n";
+
+
+$cc = new Ansi();
+$cc->v('_');
+
+$range = range(0, 5);
+
+foreach ($range as $r) {
+    foreach($range as $g) {
+        foreach ($range as $b) {
+            echo $cc->bg([$r, $g, $b]);
+        }
+    }
+}
+echo "\n";
+
+$gc = new Ansi();
+$gc->v('_');
+
+$range = range(0, 23);
+
+foreach ($range as $bw) {
+    echo $gc->bg($bw);
+}
+
+echo "\n";
