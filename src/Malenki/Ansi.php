@@ -45,6 +45,8 @@ namespace Malenki;
  */
 class Ansi
 {
+    protected $tag_format;
+
     /**
      * Stores the string to format/colorize.
      *
@@ -52,6 +54,7 @@ class Ansi
      * @access protected
      */
     protected $str = '';
+    protected $has_tags = false;
 
     /**
      * Foreground code to use.
@@ -109,8 +112,9 @@ class Ansi
 
     /**
      * Links from foreground color's name to its code
+     * @TODO To move into separated class
      */
-    protected static $arr_fg = array(
+    public static $arr_fg = array(
         'black'  => 30,
         'red'    => 31,
         'green'  => 32,
@@ -125,8 +129,9 @@ class Ansi
 
     /**
      * Links from background color's name to its code
+     * @TODO To move into separated class
      */
-    protected static $arr_bg = array(
+    public static $arr_bg = array(
         'black'   => 40,
         'red'     => 41,
         'green'   => 42,
@@ -136,72 +141,6 @@ class Ansi
         'cyan'    => 46,
         'gray'    => 47
     );
-
-    protected static function parseDom($dom, &$str_out)
-    {
-        if ($dom->childNodes) {
-
-            for ($i = 0; $i < $dom->childNodes->length; $i++) {
-                $nodes = $dom->childNodes->item($i);
-
-                //var_dump('Node found: '.$dom->localName);
-                self::parseDom($nodes, $str_out);
-            }
-
-        } else {
-            $arr_tag_names = explode('/', trim($dom->getNodePath(),'/'));
-            array_shift($arr_tag_names);
-            array_pop($arr_tag_names);
-            $a = new self($dom->nodeValue);
-
-            $arr_bg = array_keys(self::$arr_bg);
-
-            $arr_effects = array_keys(self::$arr_fg);
-            $arr_effects = array_merge($arr_effects, array('faint', 'bold', 'italic', 'underline'));
-
-            foreach ($arr_tag_names as $effect) {
-                if (in_array($effect, $arr_effects)) {
-                    $a->$effect;
-                } elseif (preg_match('/^bg_/', $effect)) {
-                    $effectbg = preg_replace('/^bg_/', '', $effect);
-
-                    if (in_array($effectbg, $arr_bg)) {
-                        $a->bg($effectbg);
-                    }
-                }
-            }
-
-            $str_out .= $a;
-        }
-    }
-
-    public static function parse($str)
-    {
-        if (preg_match("/\<.+\>.+\<\/.+\>/U",$str)) {
-            if (!extension_loaded('dom')) {
-                trigger_error(
-                    'DOM extension is not available! It is needed to parse string with tags!',
-                    E_USER_WARNING
-                );
-
-                return strip_tags($str);
-            }
-
-            $dom = new \DOMDocument('1.0');
-
-            if (!$dom->loadXML('<doc>'.$str.'</doc>')) {
-                throw new \InvalidArgumentException('Your string has malformed tags!');
-            }
-
-            $str_out = '';
-
-            self::parseDom($dom, $str_out);
-
-            return $str_out;
-        } else {
-            return $str;
-        }
-    }
 
     public function __get($name)
     {
@@ -235,8 +174,11 @@ class Ansi
             );
         }
 
+        $this->tag_format = new Ansi\TagFormat();
+
         if (is_string($str)) {
             $this->str = $str;
+            $this->has_tags = $this->tag_format->hasTags($str);
         } else {
             throw new \InvalidArgumentException('The constructor’s argument must be a string!');
         }
@@ -296,6 +238,7 @@ class Ansi
 
     public function value($str)
     {
+        // TODO scalar in place of string test ?
         if (!is_string($str)) {
             throw new \InvalidArgumentException('To set new value, you must use string argument.');
         }
@@ -446,7 +389,10 @@ class Ansi
      */
     public function render()
     {
-        if (!empty($this->str)) {
+        // TODO à refactoriser
+        if ($this->has_tags) {
+            return $this->tag_format->parse($this->str);
+        } else if (!empty($this->str)) {
             // if on windows system, no ANSI!
             if (DIRECTORY_SEPARATOR == '\\') {
                 return $this->str;
