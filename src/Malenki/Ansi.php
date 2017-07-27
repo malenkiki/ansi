@@ -46,6 +46,7 @@ namespace Malenki;
 class Ansi
 {
     protected $tag_format;
+    protected $layers = array();
 
     /**
      * Stores the string to format/colorize.
@@ -155,54 +156,18 @@ class Ansi
 
     protected function setColor($type, $name)
     {
-        if (is_string($name)) {
-            if ($type == 'bg' && array_key_exists($name, self::$arr_bg)) {
-                $this->$type = self::$arr_bg[$name];
-            } elseif ($type == 'fg' && array_key_exists($name, self::$arr_fg)) {
-                $this->$type = self::$arr_fg[$name];
-            } else {
-                throw \InvalidArgumentException(
-                    sprintf('Color "%s" does not exist!', $name)
-                );
-            }
-        } else {
-            if (is_array($name) && count($name) >= 3) {
-                if (isset($name['r'])) {
-                    $name = (object) $name;
-                } else {
-                    $new = new \stdClass();
-                    $new->r = $name[0];
-                    $new->g = $name[1];
-                    $new->b = $name[2];
+        $layer = new Ansi\Layer();
+        $layer->choose($type);
 
-                    $name = $new;
-                }
-            }
+        $color = new Ansi\Color();
+        $color->choose($name);
 
-            // RGB 256-like colors (xterm)
-            if (is_object($name) && isset($name->r) && isset($name->g) && isset($name->b)) {
-                if(
-                    in_array($name->r, range(0, 5))
-                    &&
-                    in_array($name->g, range(0, 5))
-                    &&
-                    in_array($name->b, range(0, 5))
-                )
-                {
-                    $type_extended = $type . '_extended_value';
-                    $this->$type_extended = 16 + 36 * $name->r + 6 * $name->g + $name->b;
-                    $this->is_special = true;
-                }
-            }
-
-            // Grayscale having 24 levels
-            if (is_numeric($name) && in_array($name, range(0, 23))) {
-                $type_extended = $type . '_extended_value';
-                $this->$type_extended = 0xE8 + $name;
-                $this->is_special = true;
-            }
+        if (!$color->isValid()) {
+            throw new \InvalidArgumentException('Given color cannot be used');
         }
 
+        $layer->setColor($color);
+        $this->layers[$layer->getCode()] = $layer;
     }
 
     public function value($str)

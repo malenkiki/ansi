@@ -26,31 +26,216 @@ namespace Malenki\Ansi;
 
 class Color
 {
-    protected $std_foreground_colors = array(
-        'black'  => 30,
-        'red'    => 31,
-        'green'  => 32,
-        'yellow' => 33,
-        'blue'   => 34,
-        'purple' => 35,
-        'cyan'   => 36,
-        'white'  => 37,
+    const MODE_16_COLORS     = 0xFC;
+    const MODE_256_COLORS    = 0xFFC;
+    const MODE_256_GRAYSCALE = 0xFF6;
+    const MODE_TRUE_COLORS   = 0xFFFC;
+
+    protected $std_16_colors = array(
+        'black'   => array('fg' => 30, 'bg' => 40),
+        'red'     => array('fg' => 31, 'bg' => 41),
+        'green'   => array('fg' => 32, 'bg' => 42),
+        'yellow'  => array('fg' => 33, 'bg' => 43),
+        'blue'    => array('fg' => 34, 'bg' => 44),
+        'purple'  => array('fg' => 35, 'bg' => 45), //only FG in real
+        'magenta' => array('fg' => 35, 'bg' => 45), //only BG in real
+        'cyan'    => array('fg' => 36, 'bg' => 46),
+        'white'   => array('fg' => 37, 'bg' => 47), //only FG in real
+        'gray'    => array('fg' => 37, 'bg' => 47) // only BG in real
     );
 
-    protected $std_background_colors = array(
-        'black'   => 40,
-        'red'     => 41,
-        'green'   => 42,
-        'yellow'  => 43,
-        'blue'    => 44,
-        'magenta' => 45,
-        'cyan'    => 46,
-        'gray'    => 47
-    );
+    protected $ext_256_colors;
 
-    protected $value;
+    protected $ext_grayscale_colors;
 
-    public functino getCode()
+    protected $humanRgbModeNames = array( 'rgb256', 'rgb' );
+
+    protected $mode = null;
+    protected $value = null;
+
+    public function __construct()
+    {
+        $this->ext_256_colors = range(0, 0xFF);
+        $this->ext_grayscale_colors = range(0xE8, 0xFF);
+    }
+
+    protected function arrToObj(&$color)
+    {
+        $corres = array('r', 'g', 'b', 'm');
+
+        if (is_array($color) && count($color) >= 3) {
+            foreach ($corres as $idx => $attr) {
+                if (!isset($color[$attr]) && isset($color[$idx])) {
+                    $color[$attr] = $color[$idx];
+                }
+            }
+            foreach ($color as $k => $v) {
+                if (!in_array($k, $corres)) {
+                    unset($color[$k]);
+                }
+            }
+
+            $color = (object) $color;
+        }
+    }
+
+    protected function guessString($color)
+    {
+        return (
+            is_string($color)
+            && array_key_exists($color, $this->std_16_colors)
+        );
+    }
+
+    protected function guessStringGrayscale($color)
+    {
+        return (
+            is_string($color)
+            && preg_match('/^grayscale_([1-9]{1}|1[0-9]{1}|2[0-4]{1})$/', $color)
+        );
+    }
+
+    protected function guessIntegerRgbMode($color)
+    {
+        return is_integer($color) && in_array($color, $this->ext_256_colors);
+    }
+
+    protected function guessStructuredRgbModeCommon($color)
+    {
+        if (!is_object($color)) {
+            return false;
+        }
+
+        $hasRed   = isset($color->r);
+        $hasGreen = isset($color->g);
+        $hasBlue  = isset($color->b);
+
+        $hasRgb = $hasRed && $hasGreen && $hasBlue;
+
+        if (!$hasRgb) {
+            return false;
+        }
+
+        foreach ($color as $k => $v) {
+            if (!is_integer($v)) {
+                return false;
+            }
+        }
+        // TODO check integer limit
+    }
+
+    protected function guessStructuredRgbMode256($color)
+    {
+        $ok = $this->guessStructuredRgbModeCommon($color);
+
+        if (!$ok) {
+            return false;
+        }
+
+        return isset($color->m) && $color->m === 'rgb256';
+    }
+
+
+    protected function guessStructuredRgbModeTrueColor($color)
+    {
+        $ok = $this->guessStructuredRgbModeCommon($color);
+
+        if (!$ok) {
+            return false;
+        }
+
+        if (isset($color->m) && $color->m === 'rgb') {
+            return true;
+        }
+
+        // si on n’a pas le mode explicitement, on a encore une chance de
+        // l’avoir : si toutes les valeurs sont supérieures à 5, on peut en
+        // déduire que c’est du True Colors
+        if (!isset($color->m)) {
+            foreach ($color as $k => $v) {
+                if ($v <= 5) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function doStringCase($color)
+    {
+        $this->value = $this->std_16_colors[$color];
+        $this->mode = self::MODE_16_COLORS;
+    }
+
+    protected function doStringGrayscaleCase($color)
+    {
+        list($trash, $value) = explode('_', $color);
+        $this->value = 231 + $value;
+        $this->mode = self::MODE_256_GRAYSCALE;
+    }
+
+    protected function doIntegerRgbCase($color)
+    {
+        $this->value = $color;
+        $this->mode = self::MODE_256_COLORS;
+    }
+
+    protected function doStructuredRgb256Case($color)
+    {
+        $this->value = 16 + 36 * $color->r + 6 * $color->g + $color->b;;
+        $this->mode = self::MODE_256_COLORS;
+    }
+
+    protected function doStructuredRgbTrueColorCase($color)
+    {
+        $this->value = $color;
+        $this->mode = self::MODE_TRUE_COLORS;
+    }
+
+    public function choose($color)
+    {
+        $this->arrToObj($color);
+
+        if ($this->guessString($color)) {
+            $this->doStringCase($color);
+        }
+
+        if ($this->guessStringGrayscale($color)) {
+            $this->doStringGrayscaleCase($color);
+        }
+
+        if ($this->guessIntegerRgbMode($color)) {
+            $this->doIntegerRgbCase($color);
+        }
+
+        if ($this->guessStructuredRgbMode256($color)) {
+            $this->doStructuredRgb256Case($color);
+        }
+
+        if ($this->guessStructuredRgbModeTrueColor($color)) {
+            $this->doStructuredRgbTrueColorCase($color);
+        }
+    }
+
+    public function isValid()
+    {
+        return !is_null($this->value);
+    }
+
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    public function getCode()
+    {
+        return $this->value;
+    }
+
+    public function getAnsiCode()
     {
         return $this->value;
     }
