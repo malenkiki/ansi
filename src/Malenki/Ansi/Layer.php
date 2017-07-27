@@ -37,8 +37,18 @@ class Layer
         }
     }
 
+    public function asFg()
+    {
+        $this->choose('fg');
+    }
+
+    public function asBg()
+    {
+        $this->choose('bg');
+    }
+
     public function getCode()
     {
-
+        return $this->value;
     }
 }

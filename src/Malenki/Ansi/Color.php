@@ -26,6 +26,10 @@ namespace Malenki\Ansi;
 
 class Color
 {
+    const MODE_16_COLOR = 1;
+    const MODE_256_COLOR = 2;
+    const MODE_TRUE_COLOR = 3;
+
     protected $std_foreground_colors = array(
         'black'  => 30,
         'red'    => 31,
@@ -48,9 +52,11 @@ class Color
         'gray'    => 47
     );
 
+    protected $mode;
     protected $value;
 
-    public functino getCode()
+    // TODO sera en fonction d’un context de couche
+    public function getCode()
     {
         return $this->value;
     }
