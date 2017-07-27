@@ -110,37 +110,6 @@ class Ansi
 
     protected $is_special = false;
 
-    /**
-     * Links from foreground color's name to its code
-     * @TODO To move into separated class
-     */
-    public static $arr_fg = array(
-        'black'  => 30,
-        'red'    => 31,
-        'green'  => 32,
-        'yellow' => 33,
-        'blue'   => 34,
-        'purple' => 35,
-        'cyan'   => 36,
-        'white'  => 37,
-    );
-
-
-
-    /**
-     * Links from background color's name to its code
-     * @TODO To move into separated class
-     */
-    public static $arr_bg = array(
-        'black'   => 40,
-        'red'     => 41,
-        'green'   => 42,
-        'yellow'  => 43,
-        'blue'    => 44,
-        'magenta' => 45,
-        'cyan'    => 46,
-        'gray'    => 47
-    );
 
     public function __get($name)
     {
