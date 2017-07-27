@@ -93,6 +93,7 @@ class Layer
         return $this;
     }
 
+
     public function getCode()
     {
         return $this->value;
