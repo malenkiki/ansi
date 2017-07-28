@@ -31,7 +31,9 @@ class Color
     const MODE_256_GRAYSCALE = 0xFF6;
     const MODE_TRUE_COLORS   = 0xFFFC;
 
+
     protected static $std_16_colors = array(
+        'default' => array('fg' => 39, 'bg' => 49),
         'black'   => array('fg' => 30, 'bg' => 40),
         'red'     => array('fg' => 31, 'bg' => 41),
         'green'   => array('fg' => 32, 'bg' => 42),
@@ -62,6 +64,15 @@ class Color
     {
         $this->ext_256_colors = range(0, 0xFF);
         $this->ext_grayscale_colors = range(0xE8, 0xFF);
+    }
+
+    public function isDefault()
+    {
+        return (
+            $this->mode === self::MODE_16_COLORS 
+            && 
+            $this->value === self::$std_16_colors['default']
+        );
     }
 
     protected function arrToObj(&$color)

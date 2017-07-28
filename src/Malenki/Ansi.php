@@ -57,15 +57,6 @@ class Ansi
     protected $str = '';
     protected $has_tags = false;
 
-    /**
-     * Foreground code to use.
-     *
-     * Default is set to 39 (default on the system).
-     *
-     * @var integer
-     * @access protected
-     */
-    protected $fg = 39;
 
     /**
      * Foreground extended code to use.
@@ -78,15 +69,6 @@ class Ansi
     protected $fg_extended = 38;
     protected $fg_extended_value = null;
 
-    /**
-     * Background code to use.
-     *
-     * Default is set to 49 (default on the system).
-     *
-     * @var integer
-     * @access protected
-     */
-    protected $bg = 49;
 
     /**
      * Background extended code to use.

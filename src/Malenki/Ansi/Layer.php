@@ -48,6 +48,18 @@ class Layer
     protected $effect;
     protected $value = 'fg';
 
+    protected function setDefaultColor()
+    {
+        $color = new Color();
+        $color->choose('default');
+        $this->setColor($color);
+    }
+
+    public function __construct()
+    {
+        $this->setDefaultColor();
+    }
+
     public function asForeground()
     {
         $this->choose('fg');
