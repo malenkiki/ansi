@@ -26,7 +26,7 @@ namespace Malenki\Ansi;
 
 class Effect
 {
-    protected $std_effects = array(
+    protected static $std_effects = array(
         'faint'     => 2,
         'bold'      => 1,
         'italic'    => 3,
@@ -44,14 +44,20 @@ class Effect
 
     protected function checkFormat($name)
     {
-        if (!isset($this->std_effects[$name])) {
+        if (!isset(self::$std_effects[$name])) {
             throw new \InvalidArgumentException('Given format does not exist!');
         }
     }
+
+    public function getStandardNames()
+    {
+        return array_keys(self::$std_effects);
+    }
+
     public function choose($name)
     {
         $this->checkFormat($name);
-        $this->format = $this->std_effects[$name];
+        $this->format = self::$std_effects[$name];
     }
 
     public function reset()

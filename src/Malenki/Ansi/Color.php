@@ -31,7 +31,7 @@ class Color
     const MODE_256_GRAYSCALE = 0xFF6;
     const MODE_TRUE_COLORS   = 0xFFFC;
 
-    protected $std_16_colors = array(
+    protected static $std_16_colors = array(
         'black'   => array('fg' => 30, 'bg' => 40),
         'red'     => array('fg' => 31, 'bg' => 41),
         'green'   => array('fg' => 32, 'bg' => 42),
@@ -53,6 +53,11 @@ class Color
     protected $mode = null;
     protected $value = null;
 
+    public static function getStandardNames()
+    {
+        return array_keys(self::$std_16_colors);
+    }
+
     public function __construct()
     {
         $this->ext_256_colors = range(0, 0xFF);
@@ -70,7 +75,7 @@ class Color
                 }
             }
             foreach ($color as $k => $v) {
-                if (!in_array($k, $corres)) {
+                if (is_integer($k)) {
                     unset($color[$k]);
                 }
             }
@@ -83,7 +88,7 @@ class Color
     {
         return (
             is_string($color)
-            && array_key_exists($color, $this->std_16_colors)
+            && array_key_exists($color, self::$std_16_colors)
         );
     }
 
@@ -106,9 +111,10 @@ class Color
             return false;
         }
 
-        $hasRed   = isset($color->r);
-        $hasGreen = isset($color->g);
-        $hasBlue  = isset($color->b);
+
+        $hasRed   = property_exists($color, 'r');
+        $hasGreen = property_exists($color, 'g');
+        $hasBlue  = property_exists($color, 'b');
 
         $hasRgb = $hasRed && $hasGreen && $hasBlue;
 
@@ -117,11 +123,12 @@ class Color
         }
 
         foreach ($color as $k => $v) {
-            if (!is_integer($v)) {
+            if ($k !== 'm' && !is_integer($v)) {
                 return false;
             }
         }
-        // TODO check integer limit
+
+        return true;
     }
 
     protected function guessStructuredRgbMode256($color)
@@ -166,7 +173,7 @@ class Color
 
     protected function doStringCase($color)
     {
-        $this->value = $this->std_16_colors[$color];
+        $this->value = self::$std_16_colors[$color];
         $this->mode = self::MODE_16_COLORS;
     }
 
@@ -198,7 +205,6 @@ class Color
     public function choose($color)
     {
         $this->arrToObj($color);
-
         if ($this->guessString($color)) {
             $this->doStringCase($color);
         }

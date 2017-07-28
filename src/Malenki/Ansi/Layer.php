@@ -26,6 +26,8 @@ namespace Malenki\Ansi;
 
 class Layer
 {
+    protected $codes = array('fg', 'bg');
+    /*
     protected $codes = array(
         // TODO j’ai mal compris ça, à refaire
         'fg' => array(
@@ -40,7 +42,7 @@ class Layer
             Color::MODE_TRUE_COLORS   => 48,
             Color::MODE_256_GRAYSCALE => 48
         )
-    );
+    );*/
 
     protected $color;
     protected $effect;
@@ -77,7 +79,7 @@ class Layer
 
     public function setColor(Color $color)
     {
-        $this->color = $color
+        $this->color = $color;
         return $this;
     }
 

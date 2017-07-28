@@ -46,10 +46,10 @@ class TagFormat
             array_pop($arr_tag_names);
             $a = new Ansi($dom->nodeValue);
 
-            $arr_bg = array_keys(Ansi::$arr_bg);
+            $arr_bg = Color::getStandardNames();
 
-            $arr_effects = array_keys(Ansi::$arr_fg);
-            $arr_effects = array_merge($arr_effects, array('faint', 'bold', 'italic', 'underline'));
+            $arr_effects = $arr_bg;
+            $arr_effects = array_merge($arr_effects, Effect::getStandardNames());
 
             foreach ($arr_tag_names as $effect) {
                 if (in_array($effect, $arr_effects)) {

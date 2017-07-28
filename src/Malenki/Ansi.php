@@ -114,15 +114,21 @@ class Ansi
 
     public function __get($name)
     {
-        if (in_array($name, array_keys(self::$arr_fg))) {
+        $std_colors = Ansi\Color::getStandardNames();
+        $std_effects = Ansi\Effect::getStandardNames();
+
+        if (in_array($name, $std_colors)) {
             return $this->fg($name);
         }
 
-        if (preg_match('/^bg_/', $name) && in_array(preg_replace('/^bg_/', '', $name), array_keys(self::$arr_bg))) {
+        if (
+            preg_match('/^bg_/', $name)
+            && in_array(preg_replace('/^bg_/', '', $name), $std_colors)
+        ) {
             return $this->bg(preg_replace('/^bg_/', '', $name));
         }
 
-        if (in_array($name, array('faint', 'bold', 'italic', 'underline'))) {
+        if (in_array($name, $std_effects)) {
             return $this->$name();
         }
     }
@@ -382,6 +388,10 @@ class Ansi
      */
     public function __toString()
     {
-        return $this->render();
+        try {
+            return $this->render();
+        } catch (\Exception $e) {
+            return $this->str;
+        }
     }
 }

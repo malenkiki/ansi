@@ -79,7 +79,7 @@ $range = range(0, 5);
 foreach ($range as $r) {
     foreach($range as $g) {
         foreach ($range as $b) {
-            echo $cc->fg([$r, $g, $b]);
+            echo $cc->fg([$r, $g, $b, 'rgb256']);
         }
     }
 }
@@ -94,7 +94,7 @@ $range = range(0, 5);
 foreach ($range as $r) {
     foreach($range as $g) {
         foreach ($range as $b) {
-            echo $cc->bg([$r, $g, $b]);
+            echo $cc->bg([$r, $g, $b, 'rgb256']);
         }
     }
 }
