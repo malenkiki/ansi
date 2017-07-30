@@ -95,17 +95,19 @@ class OutputBuilder
         }
     }
 
-    protected function buildStart256ColorsCase($lc, &$out)
+    protected function buildStart256ColorsOrGrayscaleCase($lc, &$out)
     {
-        if (!$lc->color->is256Colors()) {
+        if (!($lc->color->is256Colors() || $lc->color->isGrayscale())) {
             return;
         }
+
         $out[] = sprintf(
             self::PATTERN_256_COLORS,
             $lc->layer->getAnsiCode($lc->color),
             $lc->color->getAnsiCode()
         );
     }
+
 
     protected function buildStartTrueColorsCase($lc, &$out)
     {
@@ -144,7 +146,7 @@ class OutputBuilder
             $lc = $this->layers[$code];
 
             $this->buildStart16ColorsCase($lc, $out);
-            $this->buildStart256ColorsCase($lc, $out);
+            $this->buildStart256ColorsOrGrayscaleCase($lc, $out);
             $this->buildStartTrueColorsCase($lc, $out);
         }
 

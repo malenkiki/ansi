@@ -137,6 +137,36 @@ function display256ColorsBackground()
     echo "\n";
 }
 
+function displayGrayscale()
+{
+    $gc = new Ansi(' ');
+
+    $range = range(1, 24);
+
+    foreach ($range as $bw) {
+        $value = "grayscale_$bw";
+        printf('[%s] %s', $gc->bg($value), $value);
+
+        /*
+        $len = strlen($value) + 4;
+        $padding = 20 - $len;
+        echo str_pad('', $padding, ' ', STR_PAD_LEFT) . $cell
+        */
+
+        if ($bw % 4 === 0) {
+            echo PHP_EOL;
+        } else {
+            if ($bw <= 9) {
+                echo '     ';
+            } else {
+                echo '    ';
+            }
+        }
+    }
+
+    echo "\n";
+}
+
 
 
 displayTitle('16 colors foreground using effects');
@@ -152,18 +182,8 @@ display256ColorsForeground();
 displayTitle('256 colors background');
 display256ColorsBackground();
 
+displayTitle('Grayscale from 256 colors space');
+displayGrayscale();
+
 displayTitle('You can use string with tags to have multiple formats');
 displayTagParsing();
-
-/*
-$gc = new Ansi();
-$gc->v('_');
-
-$range = range(0, 23);
-
-foreach ($range as $bw) {
-    echo $gc->bg("grayscale_$bw");
-}
-
-echo "\n";
-*/
