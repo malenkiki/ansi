@@ -130,7 +130,10 @@ class Ansi
             );
         }
 
+        $this->tag_format = new Ansi\TagFormat();
         $this->value($str);
+        $this->output = new Ansi\OutputBuilder($this->str);
+        $this->format = new Ansi\Effect();
     }
 
     protected function setColor($type, $name)
@@ -150,17 +153,18 @@ class Ansi
 
     public function value($str)
     {
-        $this->tag_format = new Ansi\TagFormat();
 
         if (is_scalar($str)) {
             $this->str = $str;
-            $this->has_tags = $this->tag_format->hasTags($str);
         } else {
             throw new \InvalidArgumentException('The constructor’s argument must be a scalar value!');
         }
 
-        $this->output = new Ansi\OutputBuilder($this->str);
-        $this->format = new Ansi\Effect();
+        $this->has_tags = $this->tag_format->hasTags($this->str);
+
+        if ($this->output) {
+            $this->output->setText($this->str);
+        }
 
         /*
         if (!is_scalar($str)) {

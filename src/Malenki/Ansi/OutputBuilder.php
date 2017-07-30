@@ -51,11 +51,6 @@ class OutputBuilder
 
     public function addLayer(Layer $layer, Color $color = null)
     {
-        if (count($this->layers) >= 2) {
-            throw new \RuntimeException('Cannot add more than two layers!');
-        }
-
-
         $this->layers[$layer->getCode()] = (object) array(
             'layer' => $layer,
             'color' => $color
