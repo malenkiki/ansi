@@ -130,17 +130,7 @@ class Ansi
             );
         }
 
-        $this->tag_format = new Ansi\TagFormat();
-
-        if (is_string($str)) {
-            $this->str = $str;
-            $this->has_tags = $this->tag_format->hasTags($str);
-        } else {
-            throw new \InvalidArgumentException('The constructor’s argument must be a string!');
-        }
-
-        $this->output = new Ansi\OutputBuilder($this->str);
-        $this->format = new Ansi\Effect();
+        $this->value($str);
     }
 
     protected function setColor($type, $name)
@@ -160,13 +150,27 @@ class Ansi
 
     public function value($str)
     {
+        $this->tag_format = new Ansi\TagFormat();
+
+        if (is_scalar($str)) {
+            $this->str = $str;
+            $this->has_tags = $this->tag_format->hasTags($str);
+        } else {
+            throw new \InvalidArgumentException('The constructor’s argument must be a scalar value!');
+        }
+
+        $this->output = new Ansi\OutputBuilder($this->str);
+        $this->format = new Ansi\Effect();
+
+        /*
         if (!is_scalar($str)) {
             throw new \InvalidArgumentException('To set new value, you must use scalar argument.');
         }
 
         $this->str = $str;
         $this->output->setText($str);
-
+        */
+        
         return $this;
     }
 
@@ -262,48 +266,9 @@ class Ansi
         } elseif (!empty($this->str)) {
             $this->output->useEffect($this->format);
             return $this->output->build();
-            /*
-            $arr_out = array();
-
-            if ($this->is_special) {
-                if (!is_null($this->fg_extended_value)) {
-                    $arr_out[] = sprintf(
-                        "\033[%d;5;%dm",
-                        $this->fg_extended,
-                        $this->fg_extended_value
-                    );
-                }
-                if (!is_null($this->bg_extended_value)) {
-                    $arr_out[] = sprintf(
-                        "\033[%d;5;%dm",
-                        $this->bg_extended,
-                        $this->bg_extended_value
-                    );
-                }
-            } else {
-                if ($this->fg) {
-                    $arr_out[] = sprintf("\033[%d;%dm", $this->format, $this->fg);
-                }
-
-                if ($this->bg) {
-                    $arr_out[] = sprintf("\033[%dm", $this->bg);
-                }
-            }
-
-
-            $arr_out[] = $this->str;
-
-            if ($this->format) {
-                $arr_out[] = sprintf("\033[2%dm", $this->format);
-            }
-
-            $arr_out[] = "\033[0m";
-
-            return implode('', $arr_out);
-            */
-        } else {
-            return $this->str;
         }
+
+        return $this->str;
     }
 
     /**

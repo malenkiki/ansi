@@ -29,7 +29,7 @@ class OutputBuilder
     const PATTERN_16_COLORS_FOREGROUND = "\033[%d;%d%dm";
     const PATTERN_16_COLORS_BACKGROUND = "\033[%d%dm";
     const PATTERN_256_COLORS           = "\033[%d;5;%dm";
-    const PATTERN_TRUE_COLORS          = "\033[%d;2;%d;%d;%dm"; // TODO
+    const PATTERN_TRUE_COLORS          = "\033[%d;2;%d;%d;%dm";
     const PATTERN_CLOSE_FORMAT         = "\033[2%dm";
     const PATTERN_RESET                = "\033[0m";
 
@@ -42,12 +42,6 @@ class OutputBuilder
         $this->text = $text;
     }
 
-    protected function reset()
-    {
-        $this->text = null;
-        $this->layers = array();
-        $this->effect = null;
-    }
 
     public function setText($text)
     {
@@ -57,6 +51,11 @@ class OutputBuilder
 
     public function addLayer(Layer $layer, Color $color = null)
     {
+        if (count($this->layers) >= 2) {
+            throw new \RuntimeException('Cannot add more than two layers!');
+        }
+
+
         $this->layers[$layer->getCode()] = (object) array(
             'layer' => $layer,
             'color' => $color
@@ -153,7 +152,6 @@ class OutputBuilder
         $out[] = $this->text;
 
         $this->buildClose($out);
-        //$this->reset();
 
         return implode('', $out);
     }
