@@ -160,12 +160,12 @@ class Ansi
 
     public function value($str)
     {
-        // TODO scalar in place of string test ?
-        if (!is_string($str)) {
-            throw new \InvalidArgumentException('To set new value, you must use string argument.');
+        if (!is_scalar($str)) {
+            throw new \InvalidArgumentException('To set new value, you must use scalar argument.');
         }
 
         $this->str = $str;
+        $this->output->setText($str);
 
         return $this;
     }

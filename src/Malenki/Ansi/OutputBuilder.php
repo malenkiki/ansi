@@ -42,6 +42,19 @@ class OutputBuilder
         $this->text = $text;
     }
 
+    protected function reset()
+    {
+        $this->text = null;
+        $this->layers = array();
+        $this->effect = null;
+    }
+
+    public function setText($text)
+    {
+        $this->text = $text;
+        return $this;
+    }
+
     public function addLayer(Layer $layer, Color $color = null)
     {
         $this->layers[$layer->getCode()] = (object) array(
@@ -87,7 +100,6 @@ class OutputBuilder
         if (!$lc->color->is256Colors()) {
             return;
         }
-
         $out[] = sprintf(
             self::PATTERN_256_COLORS,
             $lc->layer->getAnsiCode($lc->color),
@@ -139,6 +151,7 @@ class OutputBuilder
         $out[] = $this->text;
 
         $this->buildClose($out);
+        //$this->reset();
 
         return implode('', $out);
     }
