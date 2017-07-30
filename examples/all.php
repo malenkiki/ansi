@@ -169,20 +169,20 @@ function displayGrayscale()
 
 function displayTrueColors()
 {
-    $range = range(0, 255, 20);
+    $range = range(0, 255, 5);
     $tc = new Ansi(' ');
 
     $i = 1;
+    $g = 254/2;
     foreach ($range as $r) {
-        foreach ($range as $g) {
-            foreach ($range as $b) {
-                echo $tc->bg([$r,$g, $b, 'rgb']);
-                if ($i === 13) {
-                    echo PHP_EOL;
-                    $i = 0;
-                }
-                $i++;
+        foreach ($range as $b) {
+            echo $tc->bg([$r,$g, $b, 'rgb']);
+
+            if ($i === 52) {
+                echo PHP_EOL;
+                $i = 0;
             }
+            $i++;
         }
     }
     echo PHP_EOL;
@@ -200,6 +200,8 @@ displayTitle('256 colors foreground');
 display256ColorsForeground();
 displayTitle('256 colors background');
 display256ColorsBackground();
+
+// TODO standard_XX and standard_bright_XX
 
 displayTitle('Grayscale from 256 colors space');
 displayGrayscale();
