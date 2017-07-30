@@ -24,6 +24,10 @@
 
 namespace Malenki;
 
+use Malenki\Ansi\Effect;
+use Malenki\Ansi\StringBuilder;
+use Malenki\Ansi\OutputBuilder;
+
 /**
  * Ansi colored string.
  *
@@ -46,7 +50,7 @@ namespace Malenki;
 class Ansi
 {
     protected $tag_format;
-    protected $layers = array();
+
 
     /**
      * Stores the string to format/colorize.
@@ -57,46 +61,25 @@ class Ansi
     protected $str = '';
     protected $has_tags = false;
 
-
     /**
-     * Foreground extended code to use.
-     *
-     * Default is set to 38 (default on the system).
-     *
-     * @var integer
-     * @access protected
+     * @var Ansi\OutputBuilder
      */
-    protected $fg_extended = 38;
-    protected $fg_extended_value = null;
-
-
-    /**
-     * Background extended code to use.
-     *
-     * Default is set to 48 (default on the system).
-     *
-     * @var integer
-     * @access protected
-     */
-    protected $bg_extended = 48;
-    protected $bg_extended_value = 0;
-
+    protected $output;
     /**
      * Format code.
      *
      * Default to 0, no effect.
      *
-     * @var integer
+     * @var Ansi\Effect
      * @access protected
      */
     protected $format = 0;
 
-    protected $is_special = false;
 
 
     public function __get($name)
     {
-        $std_colors = Ansi\Color::getStandardNames();
+        $std_colors  = Ansi\Color::getStandardNames();
         $std_effects = Ansi\Effect::getStandardNames();
 
         if (in_array($name, $std_colors)) {
@@ -111,8 +94,23 @@ class Ansi
         }
 
         if (in_array($name, $std_effects)) {
-            return $this->$name();
+            return $this->applyEffect($name);
         }
+    }
+
+    public function __call($name, $arguments)
+    {
+        $std_effects = Ansi\Effect::getStandardNames();
+
+        if (in_array($name, $std_effects)) {
+            return $this->applyEffect($name);
+        }
+    }
+
+    protected function applyEffect($name)
+    {
+        $this->format->choose($name);
+        return $this;
     }
 
     /**
@@ -140,6 +138,9 @@ class Ansi
         } else {
             throw new \InvalidArgumentException('The constructor’s argument must be a string!');
         }
+
+        $this->output = new Ansi\OutputBuilder($this->str);
+        $this->format = new Ansi\Effect();
     }
 
     protected function setColor($type, $name)
@@ -154,8 +155,7 @@ class Ansi
             throw new \InvalidArgumentException('Given color cannot be used');
         }
 
-        $layer->setColor($color);
-        $this->layers[$layer->getCode()] = $layer;
+        $this->output->addLayer($layer, $color);
     }
 
     public function value($str)
@@ -239,69 +239,11 @@ class Ansi
         return $this->background($name);
     }
 
-
-
-
-    /**
-     * Sets text as bold
-     *
-     * @access public
-     * @return Ansi
-     */
-    public function bold()
+    protected function checkAnsiAwareSystem()
     {
-        $this->format = 1;
-
-        return $this;
+        // if on windows system, no ANSI!
+        return DIRECTORY_SEPARATOR !== '\\';
     }
-
-
-
-    /**
-     * Sets text as faint.
-     *
-     * @access public
-     * @return Ansi
-     */
-    public function faint()
-    {
-        $this->format = 2;
-
-        return $this;
-    }
-
-
-
-
-    /**
-     * Sets text as italic.
-     *
-     * @access public
-     * @return Ansi
-     */
-    public function italic()
-    {
-        $this->format = 3;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Underlines the text.
-     *
-     * @access public
-     * @return Ansi
-     */
-    public function underline()
-    {
-        $this->format = 4;
-
-        return $this;
-    }
-
-
 
     /**
      * Renders the text with color and effet applied.
@@ -311,15 +253,16 @@ class Ansi
      */
     public function render()
     {
-        // TODO à refactoriser
+        if (!$this->checkAnsiAwareSystem()) {
+            return $this->str;
+        }
+
         if ($this->has_tags) {
             return $this->tag_format->parse($this->str);
-        } else if (!empty($this->str)) {
-            // if on windows system, no ANSI!
-            if (DIRECTORY_SEPARATOR == '\\') {
-                return $this->str;
-            }
-
+        } elseif (!empty($this->str)) {
+            $this->output->useEffect($this->format);
+            return $this->output->build();
+            /*
             $arr_out = array();
 
             if ($this->is_special) {
@@ -357,6 +300,7 @@ class Ansi
             $arr_out[] = "\033[0m";
 
             return implode('', $arr_out);
+            */
         } else {
             return $this->str;
         }

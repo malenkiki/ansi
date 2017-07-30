@@ -26,7 +26,12 @@ namespace Malenki\Ansi;
 
 class Layer
 {
-    protected $codes = array('fg', 'bg');
+    const FOREGROUND_16_COLORS = 3;
+    const BACKGROUND_16_COLORS = 4;
+    const FOREGROUND_OTHER_COLORS = 38;
+    const BACKGROUND_OTHER_COLORS = 48;
+
+    protected static $codes = array('fg', 'bg');
     /*
     protected $codes = array(
         // TODO j’ai mal compris ça, à refaire
@@ -48,16 +53,9 @@ class Layer
     protected $effect;
     protected $value = 'fg';
 
-    protected function setDefaultColor()
+    public static function getCodes()
     {
-        $color = new Color();
-        $color->choose('default');
-        $this->setColor($color);
-    }
-
-    public function __construct()
-    {
-        $this->setDefaultColor();
+        return self::$codes;
     }
 
     public function asForeground()
@@ -82,30 +80,24 @@ class Layer
 
     public function choose($code)
     {
-        if (!in_array($code, $this->codes)) {
+        if (!in_array($code, self::$codes)) {
             throw new \InvalidArgumentException('This layer code does not exist!');
         }
 
         $this->value = $code;
     }
 
-    public function setColor(Color $color)
-    {
-        $this->color = $color;
-        return $this;
-    }
-
-    public function setEffect(Effect $effect)
-    {
-        if ($this->isBackground()) {
-            throw new \RuntimeException(
-                'Effect cannot belongs to background layer'
-            );
-        }
-
-        $this->effect = $effect;
-        return $this;
-    }
+    // public function setEffect(Effect $effect)
+    // {
+    //     if ($this->isBackground()) {
+    //         throw new \RuntimeException(
+    //             'Effect cannot belongs to background layer'
+    //         );
+    //     }
+    //
+    //     $this->effect = $effect;
+    //     return $this;
+    // }
 
 
     public function getCode()
@@ -113,8 +105,14 @@ class Layer
         return $this->value;
     }
 
-    public function getAnsiCode()
+    public function getAnsiCode(Color $color)
     {
-        return $this->codes[$this->value][$this->color->getMode()];
+        $out = null;
+        if ($this->isForeground()) {
+            $out = $color->is16Colors() ? self::FOREGROUND_16_COLORS : self::FOREGROUND_OTHER_COLORS;
+        } else {
+            $out = $color->is16Colors() ? self::BACKGROUND_16_COLORS : self::BACKGROUND_OTHER_COLORS;
+        }
+        return $out;
     }
 }

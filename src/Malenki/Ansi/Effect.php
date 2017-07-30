@@ -69,4 +69,9 @@ class Effect
     {
         return $this->format;
     }
+
+    public function getAnsiCode()
+    {
+        return $this->format;
+    }
 }

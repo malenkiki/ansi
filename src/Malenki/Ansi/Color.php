@@ -33,6 +33,18 @@ class Color
 
 
     protected static $std_16_colors = array(
+        'default' => 9,
+        'black' => 0,
+        'red' => 1,
+        'green' => 2,
+        'yellow' => 3,
+        'blue' => 4,
+        'purple' => 5,
+        'magenta' => 5,
+        'cyan' => 6,
+        'white' => 7,
+        'gray' => 7
+        /*
         'default' => array('fg' => 39, 'bg' => 49),
         'black'   => array('fg' => 30, 'bg' => 40),
         'red'     => array('fg' => 31, 'bg' => 41),
@@ -44,6 +56,7 @@ class Color
         'cyan'    => array('fg' => 36, 'bg' => 46),
         'white'   => array('fg' => 37, 'bg' => 47), //only FG in real
         'gray'    => array('fg' => 37, 'bg' => 47) // only BG in real
+        */
     );
 
     protected $ext_256_colors;
@@ -69,8 +82,8 @@ class Color
     public function isDefault()
     {
         return (
-            $this->mode === self::MODE_16_COLORS 
-            && 
+            $this->mode === self::MODE_16_COLORS
+            &&
             $this->value === self::$std_16_colors['default']
         );
     }
@@ -203,7 +216,8 @@ class Color
 
     protected function doStructuredRgb256Case($color)
     {
-        $this->value = 16 + 36 * $color->r + 6 * $color->g + $color->b;;
+        $this->value = 16 + 36 * $color->r + 6 * $color->g + $color->b;
+        ;
         $this->mode = self::MODE_256_COLORS;
     }
 
@@ -245,6 +259,26 @@ class Color
     public function getMode()
     {
         return $this->mode;
+    }
+
+    public function is16Colors()
+    {
+        return $this->mode === self::MODE_16_COLORS;
+    }
+
+    public function is256Colors()
+    {
+        return $this->mode === self::MODE_256_COLORS;
+    }
+
+    public function isGrayscale()
+    {
+        return $this->mode === self::MODE_256_GRAYSCALE;
+    }
+
+    public function isTrueColors()
+    {
+        return $this->mode === self::MODE_TRUE_COLORS;
     }
 
     public function getCode()
