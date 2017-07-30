@@ -83,13 +83,15 @@ function display16ColorsAsMagicGetters()
 
     foreach (array('black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white') as $color) {
         echo $s->v($color)->$color;
-        echo "\n";
+        echo " ";
     }
+
+    echo PHP_EOL;
 }
 
 function displayTagParsing()
 {
-    echo new Ansi('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to <bg_magenta>have</bg_magenta> <underline><yellow>some effects</yellow></underline> too!');
+    echo new Ansi('You can <bold>parse <cyan>string</cyan></bold> containing <red>some tags</red> to <bg_magenta>have</bg_magenta> <underline><yellow>some effects</yellow> too</underline>!');
     echo "\n";
 }
 
@@ -102,12 +104,14 @@ function display256ColorsForeground()
     foreach ($range as $r) {
         foreach ($range as $g) {
             foreach ($range as $b) {
-                echo $cc->v("($r,$g,$b)")->fg([$r, $g, $b, 'rgb256']);
+                echo '[';
+                echo $cc->v("*")->fg([$r, $g, $b, 'rgb256']);
+                echo "] ($r,$g,$b)";
                 if ($b === 5) {
                     echo PHP_EOL;
                     echo PHP_EOL;
                 } else {
-                    echo "\t";
+                    echo " ";
                 }
             }
         }
@@ -124,12 +128,14 @@ function display256ColorsBackground()
     foreach ($range as $r) {
         foreach ($range as $g) {
             foreach ($range as $b) {
-                echo $cc->v("($r,$g,$b)")->bg([$r, $g, $b, 'rgb256']);
+                echo '[';
+                echo $cc->v("*")->bg([$r, $g, $b, 'rgb256']);
+                echo "] ($r,$g,$b)";
                 if ($b === 5) {
                     echo PHP_EOL;
                     echo PHP_EOL;
                 } else {
-                    echo "\t";
+                    echo " ";
                 }
             }
         }
@@ -153,7 +159,7 @@ function displayGrayscale()
         echo str_pad('', $padding, ' ', STR_PAD_LEFT) . $cell
         */
 
-        if ($bw % 4 === 0) {
+        if ($bw % 3 === 0) {
             echo PHP_EOL;
         } else {
             if ($bw <= 9) {
