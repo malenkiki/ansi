@@ -34,29 +34,16 @@ class Color
 
     protected static $std_16_colors = array(
         'default' => 9,
-        'black' => 0,
-        'red' => 1,
-        'green' => 2,
-        'yellow' => 3,
-        'blue' => 4,
-        'purple' => 5,
+        'black'   => 0,
+        'red'     => 1,
+        'green'   => 2,
+        'yellow'  => 3,
+        'blue'    => 4,
+        'purple'  => 5,
         'magenta' => 5,
-        'cyan' => 6,
-        'white' => 7,
-        'gray' => 7
-        /*
-        'default' => array('fg' => 39, 'bg' => 49),
-        'black'   => array('fg' => 30, 'bg' => 40),
-        'red'     => array('fg' => 31, 'bg' => 41),
-        'green'   => array('fg' => 32, 'bg' => 42),
-        'yellow'  => array('fg' => 33, 'bg' => 43),
-        'blue'    => array('fg' => 34, 'bg' => 44),
-        'purple'  => array('fg' => 35, 'bg' => 45), //only FG in real
-        'magenta' => array('fg' => 35, 'bg' => 45), //only BG in real
-        'cyan'    => array('fg' => 36, 'bg' => 46),
-        'white'   => array('fg' => 37, 'bg' => 47), //only FG in real
-        'gray'    => array('fg' => 37, 'bg' => 47) // only BG in real
-        */
+        'cyan'    => 6,
+        'white'   => 7,
+        'gray'    => 7
     );
 
     protected $ext_256_colors;
@@ -75,6 +62,7 @@ class Color
 
     public function __construct()
     {
+        // TODO must be static on check using other mean!
         $this->ext_256_colors = range(0, 0xFF);
         $this->ext_grayscale_colors = range(0xE8, 0xFF);
     }
