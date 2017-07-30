@@ -167,7 +167,26 @@ function displayGrayscale()
     echo "\n";
 }
 
+function displayTrueColors()
+{
+    $range = range(0, 255, 20);
+    $tc = new Ansi(' ');
 
+    $i = 1;
+    foreach ($range as $r) {
+        foreach ($range as $g) {
+            foreach ($range as $b) {
+                echo $tc->bg([$r,$g, $b, 'rgb']);
+                if ($i === 13) {
+                    echo PHP_EOL;
+                    $i = 0;
+                }
+                $i++;
+            }
+        }
+    }
+    echo PHP_EOL;
+}
 
 displayTitle('16 colors foreground using effects');
 display16ColorsForegroundAndEffects();
@@ -187,3 +206,6 @@ displayGrayscale();
 
 displayTitle('You can use string with tags to have multiple formats');
 displayTagParsing();
+
+displayTitle('Display true colors sample');
+displayTrueColors();
